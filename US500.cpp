@@ -22,7 +22,7 @@ US500::US500(Stream * str)
 }
 
 
-uint16_t getAddress()
+uint16_t US500::getAddress()
 {
   return _address;
 }
