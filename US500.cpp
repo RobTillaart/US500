@@ -11,13 +11,14 @@
 #include "US500.h"
 
 
-#define US500_REQUEST_TIMEOUT  20
+constexpr uint8_t US500_REQUEST_TIMEOUT = 20;
 
 
 US500::US500(Stream * str)
 {
-  _stream = str;
+  _stream    = str;
   _buffer[0] = '\0';
+  _address   = 0x05;
 }
 
 
@@ -103,10 +104,10 @@ void US500::flush()
 
 void US500::_command(uint8_t * arr, uint8_t TXsize)
 {
-  _stream->write((uint8_t)0x5A);
+  _stream->write((uint8_t)0x5A);  //  not part of checksum
   _stream->write((uint8_t)0x05);
   _stream->write((uint8_t)0x00);
-  uint8_t checksum = 0x5A ^ 0x05 ^0x00;
+  uint8_t checksum = 0x05 ^0x00;
   _stream->write(arr, TXsize);
   for (int i = 0; i < TXsize; i++) checksum ^= arr[i];
   _stream->write(checksum);

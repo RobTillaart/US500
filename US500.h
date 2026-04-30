@@ -34,13 +34,29 @@ public:
 
   void  flush();
 
-private:
+protected:
   Stream * _stream;
   char     _buffer[16];
+  uint8_t  _addr = 0x05;
 
   void  _command(uint8_t * arr, uint8_t TXsize);
   int   _request(uint8_t * arr, uint8_t TXsize, uint8_t RXsize);
 };
+
+
+/*
+TODO
+class US4000 : public US500
+{
+public:
+  US4000() : US500()
+  {
+    _address = 0x0A;
+  }
+  
+int setMaxDistance() { return 0x01; };  //  not supported...
+}
+*/
 
 
 //  -- END OF FILE --
