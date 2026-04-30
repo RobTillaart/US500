@@ -140,6 +140,7 @@ TODO test with hardware.
 
 - **US500(Stream \* str)** Typical Serial1 or Serial2.
 It is not known if software serial will work (not tested).
+- **uint16_t getAddress()** returns 0x0005. Convenience function.
 
 
 ### Core

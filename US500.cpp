@@ -18,9 +18,14 @@ US500::US500(Stream * str)
 {
   _stream    = str;
   _buffer[0] = '\0';
-  _address   = 0x05;
+  _address   = 0x0005;
 }
 
+
+uint16_t getAddress()
+{
+  return _address;
+}
 
 /////////////////////////////////////////////
 //
@@ -105,8 +110,8 @@ void US500::flush()
 void US500::_command(uint8_t * arr, uint8_t TXsize)
 {
   _stream->write((uint8_t)0x5A);  //  not part of checksum
-  _stream->write((uint8_t)0x05);
-  _stream->write((uint8_t)0x00);
+  _stream->write((uint8_t)_address & 0xFF);
+  _stream->write((uint8_t)_address >> 8);
   uint8_t checksum = 0x05 ^0x00;
   _stream->write(arr, TXsize);
   for (int i = 0; i < TXsize; i++) checksum ^= arr[i];
