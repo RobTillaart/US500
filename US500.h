@@ -3,7 +3,7 @@
 //    FILE: US500.h
 //  AUTHOR: Rob Tillaart
 //    DATE: 2026-04-29
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 // PURPOSE: Arduino library for US500 and US4000 underwater distance sensor.
 //     URL: https://github.com/RobTillaart/US500
 //          https://www.tinytronics.nl/nl/sensoren/afstand/pono-us500-hx-onderwater-ultrasone-afstandssensor-uart-50cm
@@ -12,7 +12,7 @@
 #include "Arduino.h"
 
 
-#define US500_LIB_VERSION         (F("0.1.1"))
+#define US500_LIB_VERSION         (F("0.1.2"))
 
 
 //  ERROR CODES US500
