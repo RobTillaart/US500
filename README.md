@@ -56,6 +56,11 @@ The devices might need a separate power supply.
 Feedback, as always is welcome.
 
 
+### Breaking change 0.1.2
+
+0.1.2 fixes the checksum calculation, so pre 0.1.2 are obsolete.
+
+
 ### Connections US500
 
 The US500 device is connected to a **controller board** (which is NOT waterproof).
