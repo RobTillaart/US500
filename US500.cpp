@@ -11,7 +11,7 @@
 #include "US500.h"
 
 
-constexpr uint8_t US500_REQUEST_TIMEOUT = 20;
+constexpr uint8_t US500_REQUEST_TIMEOUT = 30;
 
 
 US500::US500(Stream * str)
@@ -63,7 +63,7 @@ int US500::setMaxDistance(uint16_t distance)
 float US500::getTemperature()
 {
   //  cmd 0x0A, size = 0
-  uint8_t buf[5] = { 0x0A, 0x00, 0x00, 0x000, 0x00};
+  uint8_t buf[5] = { 0x0A, 0x00, 0x00, 0x00, 0x00};
   int status = _request(buf, 5, 13);
   if (status == 13)
   {
@@ -83,7 +83,7 @@ float US500::getTemperature()
 void US500::startMeasurement()
 {
   //  cmd 0x7B, size = 0
-  uint8_t buf[5] = { 0x7B, 0x00, 0x00, 0x000, 0x00};
+  uint8_t buf[5] = { 0x7B, 0x00, 0x00, 0x00, 0x00};
   _command(buf, 5);
 }
 
@@ -91,14 +91,18 @@ void US500::startMeasurement()
 void US500::stopMeasurement()
 {
   //  cmd 0x7A, size = 0
-  uint8_t buf[5] = { 0x7A, 0x00, 0x00, 0x000, 0x00};
+  uint8_t buf[5] = { 0x7A, 0x00, 0x00, 0x00, 0x00};
   _command(buf, 5);
 }
 
 
 void US500::flush()
 {
-  while(_stream->available()) _stream->read();
+  while(_stream->available())
+  {
+    delay(2);
+    _stream->read();
+  }
 }
 
 
@@ -116,7 +120,10 @@ void US500::_command(uint8_t * arr, uint8_t TXsize)
   _stream->write(hibyte);
   uint8_t checksum = lobyte ^ hibyte;
   _stream->write(arr, TXsize);
-  for (int i = 0; i < TXsize; i++) checksum ^= arr[i];
+  for (int i = 0; i < TXsize; i++) 
+  {
+    checksum ^= arr[i];
+  }
   _stream->write(checksum);
   delay(TXsize);   //  wait for all send
 }
@@ -133,7 +140,9 @@ int US500::_request(uint8_t * arr, uint8_t TXsize, uint8_t RXsize)
   {
     if (_stream->available())
     {
-      _buffer[idx++] = _stream->read();
+      uint8_t byt = _stream->read();
+      //  debug
+      _buffer[idx++] = byt;
       if (idx == RXsize) break;
     }
   }
@@ -156,7 +165,7 @@ int US500::_request(uint8_t * arr, uint8_t TXsize, uint8_t RXsize)
   */
 
   //  check answer
-  if (_buffer[3] != (0x80 | arr[3]))
+  if (_buffer[3] != (0x80 | arr[0]))
   {
     return US500_CMD_ERROR;
   }

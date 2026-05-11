@@ -38,7 +38,7 @@ public:
 
 protected:
   Stream * _stream;
-  char     _buffer[16];
+  uint8_t  _buffer[16];
   uint16_t _address = 0x0005;
 
   void  _command(uint8_t * arr, uint8_t TXsize);
