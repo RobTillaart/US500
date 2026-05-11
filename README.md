@@ -45,7 +45,7 @@ Check latest data-sheets for the details:
 |  Serial          |  9600,N,8,1 TTL    |  9600,N,8,1 TTL      |
 
 
-The library is not tested with hardware yet (order pending).
+The library is tested with MEGA2560 (version 0.2.0).
 
 It is unknown how the device behaves in other liquids.
 Assumption is that the distance measurements incorrect as most liquids
@@ -56,9 +56,19 @@ The devices might need a separate power supply.
 Feedback, as always is welcome.
 
 
+### Breaking change 0.2.0
+
+0.2.0 fixes the read process, so 0.1.x is obsolete.
+
 ### Breaking change 0.1.2
 
 0.1.2 fixes the checksum calculation, so pre 0.1.2 are obsolete.
+
+
+### Blocking
+
+The current version of the library is blocking. This is done to first have
+a working version and optimize performance, fix blocking later.
 
 
 ### Connections US500
@@ -171,9 +181,17 @@ Libraries:
 - https://github.com/RobTillaart/MAX14661 - 16x2 channel multiplexer
 
 
-### Tested
+### Performance
 
-TODO test with hardware.
+Tested with a MEGA2560, IDE 1.8.19 in air
+
+|  function        |  time   |
+|:----------------:|:-------:|
+|  getDistance     |  22 ms  |
+|  getTemperature  |  24 ms  |
+
+
+Note: do your own performance tests as they might differ.
 
 
 ## Interface
@@ -232,8 +250,7 @@ one can flush int input buffer.
 #### Must
 
 - improve documentation
-- get hardware
-- test, test, test
+- investigate a non-blocking variant.
 
 #### Should
 
@@ -249,7 +266,6 @@ one can flush int input buffer.
 - do we need to compensate distance for temperature?
   or is this done in the factory / device. (US4000 is for sure)
 - time for measurement after start.
-- performance indication. per function.
 - create unit tests if possible
 
 #### Wont

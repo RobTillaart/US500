@@ -2,7 +2,7 @@
 //    FILE: US500.cpp
 //  AUTHOR: Rob Tillaart
 //    DATE: 2026-04-29
-// VERSION: 0.1.2
+// VERSION: 0.2.0
 // PURPOSE: Arduino library for US500 and US4000 underwater distance sensor.
 //     URL: https://github.com/RobTillaart/US500
 
@@ -131,6 +131,8 @@ void US500::_command(uint8_t * arr, uint8_t TXsize)
 
 int US500::_request(uint8_t * arr, uint8_t TXsize, uint8_t RXsize)
 {
+  //  flush before new request to clear last error
+  flush();
   _command(arr, TXsize);
 
   //  wait for answer
