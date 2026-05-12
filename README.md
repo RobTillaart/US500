@@ -31,7 +31,7 @@ Check latest data-sheets for the details:
 |  Feature         |  US500             |  US4000              |
 |:-----------------|:-------------------|:---------------------|
 |  DISTANCE        |                    |                      |
-|  range           |  -50 cm            |  -400 cm = ~13 feet  |
+|  range           |  -50 cm < 2 feet   |  -400 cm = ~13 feet  |
 |  accuracy        |  ±2mm = ~0.1 inch  |  ±4cm = ~1.6 inch    |
 |  field of view   |  90±5°             |  90±4°               |
 |  frequency       |  3 MHz             |  1 MHz               |
@@ -45,7 +45,7 @@ Check latest data-sheets for the details:
 |  Serial          |  9600,N,8,1 TTL    |  9600,N,8,1 TTL      |
 
 
-The library is tested with MEGA2560 (version 0.2.0).
+The library is tested with US500 and MEGA2560 (version 0.2.0).
 
 It is unknown how the device behaves in other liquids.
 Assumption is that the distance measurements incorrect as most liquids
@@ -58,7 +58,7 @@ Feedback, as always is welcome.
 
 ### Breaking change 0.2.0
 
-0.2.0 fixes the read process, so 0.1.x is obsolete.
+0.2.0 fixes the read process, so all 0.1.x is obsolete.
 
 ### Breaking change 0.1.2
 
@@ -74,7 +74,7 @@ a working version and optimize performance, fix blocking later.
 ### Connections US500
 
 The US500 device is connected to a **controller board** (which is NOT waterproof).
-This controller board is connected over Serial with the MCU.
+This controller board is connected over Serial with the MCU (Arduino).
 
 |  Colour       |  Controller  |  Notes  |
 |:--------------|:-------------|:--------|
@@ -179,11 +179,13 @@ Libraries:
 - https://github.com/RobTillaart/MultiMap - library for non linear mapping
 - https://github.com/RobTillaart/printHelpers - scientific notation / printInch() / printFeet()
 - https://github.com/RobTillaart/MAX14661 - 16x2 channel multiplexer
+- https://github.com/RobTillaart/map2colour - maps float values (dist / temp)
+on a colour scale.
 
 
 ### Performance
 
-Tested with a MEGA2560, IDE 1.8.19 in air
+Tested US500 with a MEGA2560, IDE 1.8.19 (in air)
 
 |  function        |  time   |
 |:----------------:|:-------:|
@@ -191,7 +193,7 @@ Tested with a MEGA2560, IDE 1.8.19 in air
 |  getTemperature  |  24 ms  |
 
 
-Note: do your own performance tests as they might differ.
+Note: do your own performance tests as the devices might differ.
 
 
 ## Interface
@@ -228,6 +230,8 @@ The resolution is in steps of 0.1 degree, supports negative values.
 
 ### Error codes
 
+The error codes for the US500 and US4000 are kept the same.
+
 |  name                  |  value  |
 |:-----------------------|:-------:|
 |  US500_CMD_ERROR       |    -1   |
@@ -239,10 +243,28 @@ The resolution is in steps of 0.1 degree, supports negative values.
 |  US4000_TIMEOUT_ERROR  |    -3   |
 
 
+In a test after > 7700 calls the library had 91 TIMEOUT's
+which is about 1 in 84 calls.
+
+
+#### Disconnect detection
+
+If the temperature sensor is disconnected it returns mostly -14.90 Celsius.
+This is not a documented value in the datasheet and thus might differ per sensor.
+As the sensor is meant for water, one may use the rule of thumb that 
+any temperature below -10 indicates a connection problem.
+
+If the distance sensor is disconnected it returns the max distance
+which can be set to 15-50 cm for the US500 and up to 450 cm for
+ the US4000 sensor.
+ 
+
 ### Helper
 
 - **void flush()** if communication is out of sync, 
-one can flush int input buffer.
+one can flush the input buffer.
+Flushing is done in the library (0.2.0) before all requests to
+improve data synchronization.
 
 
 ## Future
@@ -255,6 +277,7 @@ one can flush int input buffer.
 #### Should
 
 - verify Software Serial works / not.
+- add error < -10C is connection error??
 
 #### Could
 

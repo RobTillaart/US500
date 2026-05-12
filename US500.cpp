@@ -154,7 +154,7 @@ int US500::_request(uint8_t * arr, uint8_t TXsize, uint8_t RXsize)
     return US500_TIMEOUT_ERROR;
   }
 
-  /* 
+  /*
   //  debug
   _buffer[idx] = 0;
   Serial.print("buffer: ");
